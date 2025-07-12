@@ -1,0 +1,8 @@
+node:
+  id: 1
+  is_seed: true
+  seed_nodes: []
+
+grpc:
+  host: "localhost"
+  port: 7001
