@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: api/kv-storage-service.proto
+// source: api/kv-storage.proto
 
 package kv_storage_service
 
@@ -30,10 +30,15 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type KeyValueStorageClient interface {
+	// Получение данных
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	// Изменение данных
 	Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error)
+	// Gossip
 	Gossip(ctx context.Context, in *GossipRequest, opts ...grpc.CallOption) (*GossipResponse, error)
+	// LeaderVote
 	LeaderVote(ctx context.Context, in *LeaderVoteRequest, opts ...grpc.CallOption) (*LeaderVoteResponse, error)
+	// Получение карты кластера
 	FetchFromSeed(ctx context.Context, in *FetchFromSeedRequest, opts ...grpc.CallOption) (*FetchFromSeedResponse, error)
 }
 
@@ -99,10 +104,15 @@ func (c *keyValueStorageClient) FetchFromSeed(ctx context.Context, in *FetchFrom
 // All implementations must embed UnimplementedKeyValueStorageServer
 // for forward compatibility.
 type KeyValueStorageServer interface {
+	// Получение данных
 	Get(context.Context, *GetRequest) (*GetResponse, error)
+	// Изменение данных
 	Set(context.Context, *SetRequest) (*SetResponse, error)
+	// Gossip
 	Gossip(context.Context, *GossipRequest) (*GossipResponse, error)
+	// LeaderVote
 	LeaderVote(context.Context, *LeaderVoteRequest) (*LeaderVoteResponse, error)
+	// Получение карты кластера
 	FetchFromSeed(context.Context, *FetchFromSeedRequest) (*FetchFromSeedResponse, error)
 	mustEmbedUnimplementedKeyValueStorageServer()
 }
@@ -269,5 +279,5 @@ var KeyValueStorage_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/kv-storage-service.proto",
+	Metadata: "api/kv-storage.proto",
 }

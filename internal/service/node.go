@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/Na322Pr/kv-storage-service/internal/model"
 	pb "github.com/Na322Pr/kv-storage-service/pkg/api"
+	"github.com/Na322Pr/kv-storage-service/pkg/nodemodel"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -15,13 +15,13 @@ import (
 )
 
 type NodeService struct {
-	node   *model.Node
+	node   *nodemodel.Node
 	logger *zap.Logger
 }
 
-func NewNodeService(id int, address string, isSeed bool, logger *zap.Logger) *NodeService {
+func NewNodeService(id int, address string, logger *zap.Logger) *NodeService {
 	return &NodeService{
-		node:   model.NewNode(id, address, isSeed),
+		node:   nodemodel.NewNode(id, address),
 		logger: logger,
 	}
 }
@@ -50,14 +50,13 @@ func (s *NodeService) Run(ctx context.Context, seeds []string) error {
 }
 
 func (s *NodeService) JoinCluster(ctx context.Context, seeds []string) error {
-	if !s.node.IsSeed {
-		for _, seed := range seeds {
-			peers := s.FetchPeersFromSeed(ctx, seed)
-			s.logger.Info(fmt.Sprintf("joining cluster with seed: %s", strings.Join(seeds, ",")))
-			if len(peers) > 0 {
-				s.node.UpdatePeers(peers)
-				break
-			}
+	
+	for _, seed := range seeds {
+		peers := s.FetchPeersFromSeed(ctx, seed)
+		s.logger.Info(fmt.Sprintf("joining cluster with seed: %s", strings.Join(seeds, ",")))
+		if len(peers) > 0 {
+			s.node.UpdatePeers(peers)
+			break
 		}
 	}
 

@@ -12,8 +12,8 @@ func (s *Implementation) LeaderVote(
 	return &desc.LeaderVoteResponse{
 		VoteGranted: s.nodeService.HandleVoteRequest(
 			req.GetCandidateAddress(),
-			req.GetTerm(),
+			int(req.GetTerm()),
 		),
-		Term: s.nodeService.GetTerm(),
+		Term: int64(s.nodeService.GetTerm()),
 	}, nil
 }

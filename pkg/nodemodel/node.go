@@ -11,7 +11,6 @@ type Node struct {
 	Address         string
 	LeaderAddress   string
 	IsLeader        bool
-	IsSeed          bool
 	Peers           map[string]time.Time
 	ElectionTerm    int
 	LastUpdateIndex int64
@@ -19,11 +18,10 @@ type Node struct {
 	mu              sync.Mutex
 }
 
-func NewNode(id int, address string, isSeed bool) *Node {
+func NewNode(id int, address string) *Node {
 	return &Node{
 		ID:      id,
 		Address: address,
-		IsSeed:  isSeed,
 		Peers:   make(map[string]time.Time),
 	}
 }

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        (unknown)
-// source: api/kv-storage-service.proto
+// source: api/kv-storage.proto
 
 package kv_storage_service
 
@@ -30,7 +30,7 @@ type GetRequest struct {
 
 func (x *GetRequest) Reset() {
 	*x = GetRequest{}
-	mi := &file_api_key_value_storage_proto_msgTypes[0]
+	mi := &file_api_kv_storage_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *GetRequest) String() string {
 func (*GetRequest) ProtoMessage() {}
 
 func (x *GetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[0]
+	mi := &file_api_kv_storage_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *GetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRequest.ProtoReflect.Descriptor instead.
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{0}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *GetRequest) GetKey() string {
@@ -75,7 +75,7 @@ type GetResponse struct {
 
 func (x *GetResponse) Reset() {
 	*x = GetResponse{}
-	mi := &file_api_key_value_storage_proto_msgTypes[1]
+	mi := &file_api_kv_storage_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -87,7 +87,7 @@ func (x *GetResponse) String() string {
 func (*GetResponse) ProtoMessage() {}
 
 func (x *GetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[1]
+	mi := &file_api_kv_storage_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -100,7 +100,7 @@ func (x *GetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetResponse.ProtoReflect.Descriptor instead.
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{1}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GetResponse) GetValue() string {
@@ -127,7 +127,7 @@ type SetRequest struct {
 
 func (x *SetRequest) Reset() {
 	*x = SetRequest{}
-	mi := &file_api_key_value_storage_proto_msgTypes[2]
+	mi := &file_api_kv_storage_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -139,7 +139,7 @@ func (x *SetRequest) String() string {
 func (*SetRequest) ProtoMessage() {}
 
 func (x *SetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[2]
+	mi := &file_api_kv_storage_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -152,7 +152,7 @@ func (x *SetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetRequest.ProtoReflect.Descriptor instead.
 func (*SetRequest) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{2}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SetRequest) GetKey() string {
@@ -178,7 +178,7 @@ type SetResponse struct {
 
 func (x *SetResponse) Reset() {
 	*x = SetResponse{}
-	mi := &file_api_key_value_storage_proto_msgTypes[3]
+	mi := &file_api_kv_storage_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -190,7 +190,7 @@ func (x *SetResponse) String() string {
 func (*SetResponse) ProtoMessage() {}
 
 func (x *SetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[3]
+	mi := &file_api_kv_storage_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -203,7 +203,7 @@ func (x *SetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetResponse.ProtoReflect.Descriptor instead.
 func (*SetResponse) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{3}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SetResponse) GetSuccess() bool {
@@ -222,7 +222,7 @@ type GossipRequest struct {
 
 func (x *GossipRequest) Reset() {
 	*x = GossipRequest{}
-	mi := &file_api_key_value_storage_proto_msgTypes[4]
+	mi := &file_api_kv_storage_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -234,7 +234,7 @@ func (x *GossipRequest) String() string {
 func (*GossipRequest) ProtoMessage() {}
 
 func (x *GossipRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[4]
+	mi := &file_api_kv_storage_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -247,7 +247,7 @@ func (x *GossipRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GossipRequest.ProtoReflect.Descriptor instead.
 func (*GossipRequest) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{4}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GossipRequest) GetNode() string {
@@ -259,13 +259,14 @@ func (x *GossipRequest) GetNode() string {
 
 type GossipResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsLeader      bool                   `protobuf:"varint,1,opt,name=is_leader,json=isLeader,proto3" json:"is_leader,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GossipResponse) Reset() {
 	*x = GossipResponse{}
-	mi := &file_api_key_value_storage_proto_msgTypes[5]
+	mi := &file_api_kv_storage_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -277,7 +278,7 @@ func (x *GossipResponse) String() string {
 func (*GossipResponse) ProtoMessage() {}
 
 func (x *GossipResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[5]
+	mi := &file_api_kv_storage_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -290,7 +291,14 @@ func (x *GossipResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GossipResponse.ProtoReflect.Descriptor instead.
 func (*GossipResponse) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{5}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GossipResponse) GetIsLeader() bool {
+	if x != nil {
+		return x.IsLeader
+	}
+	return false
 }
 
 type LeaderVoteRequest struct {
@@ -303,7 +311,7 @@ type LeaderVoteRequest struct {
 
 func (x *LeaderVoteRequest) Reset() {
 	*x = LeaderVoteRequest{}
-	mi := &file_api_key_value_storage_proto_msgTypes[6]
+	mi := &file_api_kv_storage_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -315,7 +323,7 @@ func (x *LeaderVoteRequest) String() string {
 func (*LeaderVoteRequest) ProtoMessage() {}
 
 func (x *LeaderVoteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[6]
+	mi := &file_api_kv_storage_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -328,7 +336,7 @@ func (x *LeaderVoteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaderVoteRequest.ProtoReflect.Descriptor instead.
 func (*LeaderVoteRequest) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{6}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *LeaderVoteRequest) GetCandidateAddress() string {
@@ -355,7 +363,7 @@ type LeaderVoteResponse struct {
 
 func (x *LeaderVoteResponse) Reset() {
 	*x = LeaderVoteResponse{}
-	mi := &file_api_key_value_storage_proto_msgTypes[7]
+	mi := &file_api_kv_storage_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -367,7 +375,7 @@ func (x *LeaderVoteResponse) String() string {
 func (*LeaderVoteResponse) ProtoMessage() {}
 
 func (x *LeaderVoteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[7]
+	mi := &file_api_kv_storage_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -380,7 +388,7 @@ func (x *LeaderVoteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaderVoteResponse.ProtoReflect.Descriptor instead.
 func (*LeaderVoteResponse) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{7}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *LeaderVoteResponse) GetVoteGranted() bool {
@@ -406,7 +414,7 @@ type FetchFromSeedRequest struct {
 
 func (x *FetchFromSeedRequest) Reset() {
 	*x = FetchFromSeedRequest{}
-	mi := &file_api_key_value_storage_proto_msgTypes[8]
+	mi := &file_api_kv_storage_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -418,7 +426,7 @@ func (x *FetchFromSeedRequest) String() string {
 func (*FetchFromSeedRequest) ProtoMessage() {}
 
 func (x *FetchFromSeedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[8]
+	mi := &file_api_kv_storage_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -431,7 +439,7 @@ func (x *FetchFromSeedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchFromSeedRequest.ProtoReflect.Descriptor instead.
 func (*FetchFromSeedRequest) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{8}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *FetchFromSeedRequest) GetAddress() string {
@@ -450,7 +458,7 @@ type FetchFromSeedResponse struct {
 
 func (x *FetchFromSeedResponse) Reset() {
 	*x = FetchFromSeedResponse{}
-	mi := &file_api_key_value_storage_proto_msgTypes[9]
+	mi := &file_api_kv_storage_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -462,7 +470,7 @@ func (x *FetchFromSeedResponse) String() string {
 func (*FetchFromSeedResponse) ProtoMessage() {}
 
 func (x *FetchFromSeedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[9]
+	mi := &file_api_kv_storage_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -475,7 +483,7 @@ func (x *FetchFromSeedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchFromSeedResponse.ProtoReflect.Descriptor instead.
 func (*FetchFromSeedResponse) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{9}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *FetchFromSeedResponse) GetPeers() []string {
@@ -495,7 +503,7 @@ type Status struct {
 
 func (x *Status) Reset() {
 	*x = Status{}
-	mi := &file_api_key_value_storage_proto_msgTypes[10]
+	mi := &file_api_kv_storage_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -507,7 +515,7 @@ func (x *Status) String() string {
 func (*Status) ProtoMessage() {}
 
 func (x *Status) ProtoReflect() protoreflect.Message {
-	mi := &file_api_key_value_storage_proto_msgTypes[10]
+	mi := &file_api_kv_storage_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -520,7 +528,7 @@ func (x *Status) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Status.ProtoReflect.Descriptor instead.
 func (*Status) Descriptor() ([]byte, []int) {
-	return file_api_key_value_storage_proto_rawDescGZIP(), []int{10}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Status) GetCode() int32 {
@@ -537,11 +545,11 @@ func (x *Status) GetMessage() string {
 	return ""
 }
 
-var File_api_key_value_storage_proto protoreflect.FileDescriptor
+var File_api_kv_storage_proto protoreflect.FileDescriptor
 
-const file_api_key_value_storage_proto_rawDesc = "" +
+const file_api_kv_storage_proto_rawDesc = "" +
 	"\n" +
-	"\x1bapi/kv-storage-service.proto\x12\x12kv_storage_service\"\x1e\n" +
+	"\x14api/kv-storage.proto\x12\x12kv_storage_service\"\x1e\n" +
 	"\n" +
 	"GetRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\"9\n" +
@@ -555,8 +563,9 @@ const file_api_key_value_storage_proto_rawDesc = "" +
 	"\vSetResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\"#\n" +
 	"\rGossipRequest\x12\x12\n" +
-	"\x04node\x18\x01 \x01(\tR\x04node\"\x10\n" +
-	"\x0eGossipResponse\"T\n" +
+	"\x04node\x18\x01 \x01(\tR\x04node\"-\n" +
+	"\x0eGossipResponse\x12\x1b\n" +
+	"\tis_leader\x18\x01 \x01(\bR\bisLeader\"T\n" +
 	"\x11LeaderVoteRequest\x12+\n" +
 	"\x11candidate_address\x18\x01 \x01(\tR\x10candidateAddress\x12\x12\n" +
 	"\x04term\x18\x02 \x01(\x03R\x04term\"K\n" +
@@ -579,19 +588,19 @@ const file_api_key_value_storage_proto_rawDesc = "" +
 	"\rFetchFromSeed\x12(.kv_storage_service.FetchFromSeedRequest\x1a).kv_storage_service.FetchFromSeedResponseBaZ_github.com/Na322Pr/key-value-store/kv-storage-service/pkg/kv-storage-service;kv_storage_serviceb\x06proto3"
 
 var (
-	file_api_key_value_storage_proto_rawDescOnce sync.Once
-	file_api_key_value_storage_proto_rawDescData []byte
+	file_api_kv_storage_proto_rawDescOnce sync.Once
+	file_api_kv_storage_proto_rawDescData []byte
 )
 
-func file_api_key_value_storage_proto_rawDescGZIP() []byte {
-	file_api_key_value_storage_proto_rawDescOnce.Do(func() {
-		file_api_key_value_storage_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_key_value_storage_proto_rawDesc), len(file_api_key_value_storage_proto_rawDesc)))
+func file_api_kv_storage_proto_rawDescGZIP() []byte {
+	file_api_kv_storage_proto_rawDescOnce.Do(func() {
+		file_api_kv_storage_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_kv_storage_proto_rawDesc), len(file_api_kv_storage_proto_rawDesc)))
 	})
-	return file_api_key_value_storage_proto_rawDescData
+	return file_api_kv_storage_proto_rawDescData
 }
 
-var file_api_key_value_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_api_key_value_storage_proto_goTypes = []any{
+var file_api_kv_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_api_kv_storage_proto_goTypes = []any{
 	(*GetRequest)(nil),            // 0: kv_storage_service.GetRequest
 	(*GetResponse)(nil),           // 1: kv_storage_service.GetResponse
 	(*SetRequest)(nil),            // 2: kv_storage_service.SetRequest
@@ -604,7 +613,7 @@ var file_api_key_value_storage_proto_goTypes = []any{
 	(*FetchFromSeedResponse)(nil), // 9: kv_storage_service.FetchFromSeedResponse
 	(*Status)(nil),                // 10: kv_storage_service.Status
 }
-var file_api_key_value_storage_proto_depIdxs = []int32{
+var file_api_kv_storage_proto_depIdxs = []int32{
 	0, // 0: kv_storage_service.KeyValueStorage.Get:input_type -> kv_storage_service.GetRequest
 	2, // 1: kv_storage_service.KeyValueStorage.Set:input_type -> kv_storage_service.SetRequest
 	4, // 2: kv_storage_service.KeyValueStorage.Gossip:input_type -> kv_storage_service.GossipRequest
@@ -622,26 +631,26 @@ var file_api_key_value_storage_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_api_key_value_storage_proto_init() }
-func file_api_key_value_storage_proto_init() {
-	if File_api_key_value_storage_proto != nil {
+func init() { file_api_kv_storage_proto_init() }
+func file_api_kv_storage_proto_init() {
+	if File_api_kv_storage_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_key_value_storage_proto_rawDesc), len(file_api_key_value_storage_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_kv_storage_proto_rawDesc), len(file_api_kv_storage_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_key_value_storage_proto_goTypes,
-		DependencyIndexes: file_api_key_value_storage_proto_depIdxs,
-		MessageInfos:      file_api_key_value_storage_proto_msgTypes,
+		GoTypes:           file_api_kv_storage_proto_goTypes,
+		DependencyIndexes: file_api_kv_storage_proto_depIdxs,
+		MessageInfos:      file_api_kv_storage_proto_msgTypes,
 	}.Build()
-	File_api_key_value_storage_proto = out.File
-	file_api_key_value_storage_proto_goTypes = nil
-	file_api_key_value_storage_proto_depIdxs = nil
+	File_api_kv_storage_proto = out.File
+	file_api_kv_storage_proto_goTypes = nil
+	file_api_kv_storage_proto_depIdxs = nil
 }
