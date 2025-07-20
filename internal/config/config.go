@@ -6,25 +6,26 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
-	Node `yaml:"node"`
-	GRPC `yaml:"grpc"`
+	Node `yaml:"node" env-required:"true"`
+	GRPC `yaml:"grpc" env-required:"true"`
 }
 
 type Node struct {
-	ID        int      `yaml:"id" env:"NODE_ID"`
-	IsSeed    bool     `yaml:"is_seed" env:"NODE_IS_SEED"`
-	SeedNodes []string `yaml:"seed_nodes" env:"NODE_SEED_NODES"`
+	ID        int      `yaml:"id" env:"NODE_ID" env-required:"true"`
+	SeedNodes []string `yaml:"seed_nodes" env:"SEED_NODES" env-separator:","`
 }
 
 type GRPC struct {
-	Host string `yaml:"host" env:"GRPC_HOST"`
-	Port int    `yaml:"port" env:"GRPC_PORT"`
+	Host string `yaml:"host" env:"GRPC_HOST" env-default:"0.0.0.0"`
+	Port int    `yaml:"port" env:"GRPC_PORT" env-required:"true"`
 }
 
 var (
@@ -33,14 +34,22 @@ var (
 )
 
 func MustLoad() *Config {
-
 	once.Do(func() {
+		configInstance = &Config{}
+		var err error
+
+		err = tryLoadFromEnv(configInstance)
+		if err == nil {
+			log.Println("config loaded from environment variables")
+			return
+		}
+		log.Printf("failed to load from env: %v, falling back to config file", err)
+
 		configPath := fetchConfigPath()
 		if configPath == "" {
 			log.Fatal("config path is empty")
 		}
 
-		var err error
 		configInstance, err = LoadPath(configPath)
 		if err != nil {
 			log.Fatalf("failed to load config: %v", err)
@@ -48,6 +57,31 @@ func MustLoad() *Config {
 	})
 
 	return configInstance
+}
+
+func tryLoadFromEnv(cfg *Config) error {
+	nodeIDStr := os.Getenv("NODE_ID")
+	if nodeIDStr != "" {
+		if id, err := strconv.Atoi(nodeIDStr); err == nil {
+			cfg.Node.ID = id
+		} else {
+			return fmt.Errorf("invalid NODE_ID: %v", err)
+		}
+	}
+
+	portStr := os.Getenv("GRPC_PORT")
+	log.Printf("Useful info, grpc port: %s, \n", portStr)
+	if strings.HasPrefix(portStr, "${NOMAD_PORT_") {
+		cfg.GRPC.Port = 8080
+	} else if portStr != "" {
+		if port, err := strconv.Atoi(portStr); err == nil {
+			cfg.GRPC.Port = port
+		} else {
+			return fmt.Errorf("invalid GRPC_PORT: %v", err)
+		}
+	}
+
+	return cleanenv.ReadEnv(cfg)
 }
 
 func LoadPath(configPath string) (*Config, error) {

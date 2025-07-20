@@ -2,6 +2,12 @@ LOCAL_BIN := $(shell go env GOPATH)/bin
 PROTO_ROOT := api
 GEN_DIR := pkg
 
+build:
+	docker build -t na322pr/kv-storage-service:latest .
+
+push: build
+	docker push na322pr/kv-storage-service:latest
+
 
 run:
 	go run cmd/main.go -config ./config/config.yaml

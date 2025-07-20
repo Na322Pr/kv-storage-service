@@ -20,7 +20,7 @@ func (s *StorageService) Set(_ context.Context, key, value string) error {
 	return nil
 }
 
-func (s *StorageService) Get(_ context.Context, key string) (storage.Item, error) {
-	value := s.store.Get(key)
-	return value, nil
+func (s *StorageService) Get(_ context.Context, key string) (storage.Item, bool) {
+	value, ok := s.store.Get(key)
+	return value, ok
 }

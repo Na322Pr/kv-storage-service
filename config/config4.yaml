@@ -1,6 +1,5 @@
 node:
   id: 4
-  is_seed: false
   seed_nodes: ["localhost:7001"]
 
 grpc:

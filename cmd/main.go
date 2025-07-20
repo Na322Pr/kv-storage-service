@@ -43,7 +43,6 @@ func main() {
 
 	logger.Info("Service config info",
 		zap.Int("id", cfg.Node.ID),
-		zap.Bool("isSeed", cfg.Node.IsSeed),
 		zap.String("seedNodes", strings.Join(cfg.Node.SeedNodes, ",")),
 		zap.String("grpcAddress", grpcAddress),
 	)
@@ -54,7 +53,7 @@ func main() {
 	http.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
 	go http.ListenAndServe(":2112", nil)
 
-	nodeService := service.NewNodeService(cfg.Node.ID, grpcAddress, cfg.Node.IsSeed, logger)
+	nodeService := service.NewNodeService(cfg.Node.ID, grpcAddress, logger)
 
 	keyValueStorage := storage.NewKeyValueInMemoryStorage()
 	storageService := service.NewStorageService(keyValueStorage)

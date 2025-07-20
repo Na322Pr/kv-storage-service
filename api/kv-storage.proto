@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package kv_storage_service;
 
-option go_package = "github.com/Na322Pr/key-value-store/kv-storage-service/pkg/kv-storage-service;kv_storage_service";
+option go_package = "github.com/Na322Pr/kv-storage-service/pkg/kv-storage-service;kv_storage_service";
 
 service KeyValueStorage {
   // Получение данных

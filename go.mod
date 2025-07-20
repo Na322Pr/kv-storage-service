@@ -3,6 +3,7 @@ module github.com/Na322Pr/kv-storage-service
 go 1.24.4
 
 require (
+	github.com/Na322Pr/kv-storage-service/pkg/nodemodel v0.0.1
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/prometheus/client_golang v1.22.0
 	go.uber.org/zap v1.27.0
