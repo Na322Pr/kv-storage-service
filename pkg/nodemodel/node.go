@@ -7,22 +7,21 @@ import (
 )
 
 type Node struct {
-	ID              int
-	Address         string
-	LeaderAddress   string
-	IsLeader        bool
-	Peers           map[string]time.Time
-	ElectionTerm    int
-	LastUpdateIndex int64
-	VotedFor        string
-	mu              sync.Mutex
+	ID           int
+	Address      string
+	IsLeader     bool
+	Peers        map[string]time.Time
+	LastElection int
+	mu           sync.Mutex
 }
 
 func NewNode(id int, address string) *Node {
 	return &Node{
-		ID:      id,
-		Address: address,
-		Peers:   make(map[string]time.Time),
+		ID:           id,
+		Address:      address,
+		Peers:        make(map[string]time.Time),
+		LastElection: 0,
+		mu:           sync.Mutex{},
 	}
 }
 
@@ -50,12 +49,14 @@ func (n *Node) GetPeersString() string {
 func (n *Node) UpdatePeer(peer string) {
 	n.mu.Lock()
 	defer n.mu.Unlock()
+	
 	n.Peers[peer] = time.Now()
 }
 
 func (n *Node) UpdatePeers(peer []string) {
 	n.mu.Lock()
 	defer n.mu.Unlock()
+
 	for _, peer := range peer {
 		n.Peers[peer] = time.Now()
 	}
@@ -64,6 +65,7 @@ func (n *Node) UpdatePeers(peer []string) {
 func (n *Node) RemovePeer(peer string) {
 	n.mu.Lock()
 	defer n.mu.Unlock()
+
 	delete(n.Peers, peer)
 }
 
@@ -78,42 +80,16 @@ func (n *Node) CleanUpStalePeers(duration time.Duration) {
 	}
 }
 
-func (n *Node) GetTerm() int {
-	return n.ElectionTerm
-}
-
-func (n *Node) CheckVoteAvailable(term int) bool {
-	if n.ElectionTerm >= term {
-		return false
-	}
-
-	return true
-}
-
-func (n *Node) GrantVote(votedFor string, term int) {
-	n.mu.Lock()
-	defer n.mu.Unlock()
-
-	n.VotedFor = votedFor
-	n.ElectionTerm = term
-}
-
-func (n *Node) StartLeaderElection() {
-	n.mu.Lock()
-	defer n.mu.Unlock()
-
-	n.ElectionTerm = n.ElectionTerm + 1
-	n.VotedFor = n.GetAddress()
-}
-
 func (n *Node) BecomeLeader() {
 	n.mu.Lock()
 	defer n.mu.Unlock()
 
 	n.IsLeader = true
-	n.LeaderAddress = n.GetAddress()
 }
 
-func (n *Node) GetLeaderAddress() string {
-	return n.LeaderAddress
+func (n *Node) BecomeReplica() {
+	n.mu.Lock()
+	defer n.mu.Unlock()
+
+	n.IsLeader = false
 }
