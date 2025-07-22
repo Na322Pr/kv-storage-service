@@ -10,11 +10,13 @@ type Implementation struct {
 
 	nodeService    *service.NodeService
 	storageService *service.StorageService
+	leService      *service.LeService
 }
 
 func NewImplementation(
 	nodeService *service.NodeService,
 	storeService *service.StorageService,
+	leService *service.LeService,
 ) *Implementation {
 	return &Implementation{
 		nodeService:    nodeService,

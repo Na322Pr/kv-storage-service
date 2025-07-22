@@ -19,9 +19,9 @@ type NodeService struct {
 	logger *zap.Logger
 }
 
-func NewNodeService(id int, address string, logger *zap.Logger) *NodeService {
+func NewNodeService(node *nodemodel.Node, logger *zap.Logger) *NodeService {
 	return &NodeService{
-		node:   nodemodel.NewNode(id, address),
+		node:   node,
 		logger: logger,
 	}
 }
@@ -31,12 +31,7 @@ func (s *NodeService) Run(ctx context.Context, seeds []string) error {
 		s.logger.Fatal("failed to join cluster", zap.Error(err))
 		return err
 	}
-
-	//go func() {
-	//	time.Sleep(time.Duration(rand.Intn(300)) * time.Millisecond) // Random delay
-	//	s.StartLeaderElection()
-	//}()
-
+	
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
@@ -50,7 +45,7 @@ func (s *NodeService) Run(ctx context.Context, seeds []string) error {
 }
 
 func (s *NodeService) JoinCluster(ctx context.Context, seeds []string) error {
-	
+
 	for _, seed := range seeds {
 		peers := s.FetchPeersFromSeed(ctx, seed)
 		s.logger.Info(fmt.Sprintf("joining cluster with seed: %s", strings.Join(seeds, ",")))
@@ -147,10 +142,6 @@ func (s *NodeService) HandleGossip(peer string) {
 	s.node.UpdatePeer(peer)
 }
 
-func (s *NodeService) GetTerm() int {
-	return s.node.ElectionTerm
-}
-
 func (s *NodeService) GetPeers() []string {
 	return s.node.GetPeers()
 }
@@ -161,86 +152,12 @@ func (s *NodeService) SeedHandleAddPeer(address string) []string {
 	return peers
 }
 
-func (s *NodeService) HandleVoteRequest(candidateAddress string, term int) bool {
-	if !s.node.CheckVoteAvailable(term) {
-		return false
-	}
-
-	s.node.GrantVote(candidateAddress, term)
-	return true
-}
-
-func (s *NodeService) StartLeaderElection() {
-	s.node.StartLeaderElection()
-
-	s.logger.Info("starting leader election",
-		zap.Int("term", s.node.GetTerm()),
-		zap.String("candidate", s.node.GetAddress()))
-
-	voteCh := make(chan bool, 1)
-
-	var (
-		votesNeeded   = len(s.node.GetPeers())/2 + 1
-		votesReceived = 1
-		wg            sync.WaitGroup
-	)
-
-	for _, peer := range s.node.GetPeers() {
-		wg.Add(1)
-		go func(peer string) {
-			defer wg.Done()
-
-			conn, err := grpc.NewClient(
-				peer,
-				grpc.WithTransportCredentials(insecure.NewCredentials()),
-			)
-			if err != nil {
-				s.logger.Error("failed to connect to peer for vote request",
-					zap.String("peer", peer),
-					zap.Error(err))
-				return
-			}
-			defer conn.Close()
-
-			client := pb.NewKeyValueStorageClient(conn)
-			resp, err := client.LeaderVote(context.Background(), &pb.LeaderVoteRequest{
-				CandidateAddress: s.node.GetAddress(),
-				Term:             int64(s.node.ElectionTerm),
-			})
-
-			if err != nil {
-				s.logger.Error("vote request failed",
-					zap.String("peer", peer),
-					zap.Error(err))
-				return
-			}
-
-			if resp.VoteGranted {
-				voteCh <- true
-			}
-		}(peer)
-	}
-
-	// Wait for votes or timeout
-	go func() {
-		for vote := range voteCh {
-			if vote {
-				votesReceived++
-			}
-
-			if votesReceived >= votesNeeded {
-				s.becomeLeader()
-				return
-			}
-		}
-	}()
-}
-
 func (s *NodeService) becomeLeader() {
 	s.node.BecomeLeader()
+	s.logger.Info("became leader")
+}
 
-	s.logger.Info("became leader",
-		zap.Int("term", s.node.GetTerm()),
-		zap.String("leader", s.node.GetAddress()),
-	)
+func (s *NodeService) becomeReplica() {
+	s.node.BecomeReplica()
+	s.logger.Info("became replica")
 }

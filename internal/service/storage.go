@@ -24,3 +24,7 @@ func (s *StorageService) Get(_ context.Context, key string) (storage.Item, bool)
 	value, ok := s.store.Get(key)
 	return value, ok
 }
+
+func (s *StorageService) GetDataVersion(_ context.Context) int64 {
+	return s.store.GetDataVersion()
+}

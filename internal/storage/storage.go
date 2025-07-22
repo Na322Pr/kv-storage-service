@@ -6,7 +6,8 @@ import (
 )
 
 type KeyValueInMemoryStorage struct {
-	items sync.Map
+	items   sync.Map
+	version int64
 }
 
 type Item struct {
@@ -16,12 +17,14 @@ type Item struct {
 
 func NewKeyValueInMemoryStorage() *KeyValueInMemoryStorage {
 	return &KeyValueInMemoryStorage{
-		items: sync.Map{},
+		items:   sync.Map{},
+		version: 0,
 	}
 }
 
 func (s *KeyValueInMemoryStorage) Set(key string, value interface{}) {
 	s.items.Store(key, Item{Value: value})
+	s.version++
 }
 
 func (s *KeyValueInMemoryStorage) Get(key string) (Item, bool) {
@@ -32,14 +35,20 @@ func (s *KeyValueInMemoryStorage) Get(key string) (Item, bool) {
 	return val.(Item), true
 }
 
+func (s *KeyValueInMemoryStorage) GetDataVersion() int64 {
+	return s.version
+}
+
 func (s *KeyValueInMemoryStorage) SetWithExpiration(key string, value interface{}, expiration time.Duration) {
 	expirationTime := time.Now().Add(expiration).UnixNano()
 	s.items.Store(key, Item{
 		Value:      value,
 		Expiration: expirationTime,
 	})
+	s.version++
 }
 
 func (s *KeyValueInMemoryStorage) Delete(key string) {
 	s.items.Delete(key)
+	s.version++
 }

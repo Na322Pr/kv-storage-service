@@ -8,6 +8,7 @@ import (
 	"github.com/Na322Pr/kv-storage-service/internal/service"
 	"github.com/Na322Pr/kv-storage-service/internal/storage"
 	desc "github.com/Na322Pr/kv-storage-service/pkg/api"
+	"github.com/Na322Pr/kv-storage-service/pkg/nodemodel"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -22,6 +23,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	//"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+
+	"google.golang.org/grpc/health"
+	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 func main() {
@@ -53,12 +57,16 @@ func main() {
 	http.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
 	go http.ListenAndServe(":2112", nil)
 
-	nodeService := service.NewNodeService(cfg.Node.ID, grpcAddress, logger)
+	nodeModel := nodemodel.NewNode(cfg.Node.ID, grpcAddress)
+
+	nodeService := service.NewNodeService(nodeModel, logger)
 
 	keyValueStorage := storage.NewKeyValueInMemoryStorage()
 	storageService := service.NewStorageService(keyValueStorage)
 
-	storeApp := kv_storage_service.NewImplementation(nodeService, storageService)
+	leService := service.NewLeService(nodeModel, storageService, logger)
+
+	storeApp := kv_storage_service.NewImplementation(nodeService, storageService, leService)
 
 	lis, err := net.Listen("tcp", grpcAddress)
 	if err != nil {
@@ -68,6 +76,17 @@ func main() {
 	grpcServer := grpc.NewServer()
 	reflection.Register(grpcServer)
 	desc.RegisterKeyValueStorageServer(grpcServer, storeApp)
+
+	healthServer := health.NewServer()
+	grpc_health_v1.RegisterHealthServer(grpcServer, healthServer)
+
+	// Set initial status for your service
+	healthServer.SetServingStatus("kv_storage_service.KeyValueStorage",
+		grpc_health_v1.HealthCheckResponse_SERVING)
+
+	// Set overall server status
+	healthServer.SetServingStatus("",
+		grpc_health_v1.HealthCheckResponse_SERVING)
 
 	logger.Info(fmt.Sprintf("Starting grpc server on %s...", grpcAddress))
 	go func() {
@@ -85,14 +104,3 @@ func main() {
 	fmt.Println("\nShutting down servers...")
 	os.Exit(0)
 }
-
-// Ноды начинают процесс голосования, когда лидер нода выбывает
-// (n *Node) CleanUpStalePeers
-//
-// Нода собирает голоса с остальных нол
-// Лидер, сам рассылает информацию о себе
-// Ноды сами определяют лидера
-// Есть независимый сервис, который это все определяет.
-
-// Должен быть какой-то сервис, который будет расспределять нагрузку между нодами.
-// Соответственно через него, можно будет создать/удалить ноды.
