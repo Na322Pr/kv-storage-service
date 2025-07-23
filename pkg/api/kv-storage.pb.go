@@ -793,13 +793,11 @@ const file_api_kv_storage_proto_rawDesc = "" +
 	"\x14UpdateLeaderResponse\"6\n" +
 	"\x16UpdateAddressesRequest\x12\x1c\n" +
 	"\taddresses\x18\x01 \x03(\tR\taddresses\"\x19\n" +
-	"\x17UpdateAddressesResponse2\xca\x05\n" +
+	"\x17UpdateAddressesResponse2\x93\x04\n" +
 	"\x0fKeyValueStorage\x12F\n" +
 	"\x03Get\x12\x1e.kv_storage_service.GetRequest\x1a\x1f.kv_storage_service.GetResponse\x12F\n" +
 	"\x03Set\x12\x1e.kv_storage_service.SetRequest\x1a\x1f.kv_storage_service.SetResponse\x12P\n" +
 	"\tSetStream\x12\x1e.kv_storage_service.SetRequest\x1a\x1f.kv_storage_service.SetResponse(\x010\x01\x12O\n" +
-	"\x06Gossip\x12!.kv_storage_service.GossipRequest\x1a\".kv_storage_service.GossipResponse\x12d\n" +
-	"\rFetchFromSeed\x12(.kv_storage_service.FetchFromSeedRequest\x1a).kv_storage_service.FetchFromSeedResponse\x12O\n" +
 	"\x06LeMeta\x12!.kv_storage_service.LeMetaRequest\x1a\".kv_storage_service.LeMetaResponse\x12a\n" +
 	"\fUpdateLeader\x12'.kv_storage_service.UpdateLeaderRequest\x1a(.kv_storage_service.UpdateLeaderResponse\x12j\n" +
 	"\x0fUpdateAddresses\x12*.kv_storage_service.UpdateAddressesRequest\x1a+.kv_storage_service.UpdateAddressesResponseBQZOgithub.com/Na322Pr/kv-storage-service/pkg/kv-storage-service;kv_storage_serviceb\x06proto3"
@@ -839,21 +837,17 @@ var file_api_kv_storage_proto_depIdxs = []int32{
 	0,  // 0: kv_storage_service.KeyValueStorage.Get:input_type -> kv_storage_service.GetRequest
 	2,  // 1: kv_storage_service.KeyValueStorage.Set:input_type -> kv_storage_service.SetRequest
 	2,  // 2: kv_storage_service.KeyValueStorage.SetStream:input_type -> kv_storage_service.SetRequest
-	4,  // 3: kv_storage_service.KeyValueStorage.Gossip:input_type -> kv_storage_service.GossipRequest
-	8,  // 4: kv_storage_service.KeyValueStorage.FetchFromSeed:input_type -> kv_storage_service.FetchFromSeedRequest
-	10, // 5: kv_storage_service.KeyValueStorage.LeMeta:input_type -> kv_storage_service.LeMetaRequest
-	12, // 6: kv_storage_service.KeyValueStorage.UpdateLeader:input_type -> kv_storage_service.UpdateLeaderRequest
-	14, // 7: kv_storage_service.KeyValueStorage.UpdateAddresses:input_type -> kv_storage_service.UpdateAddressesRequest
-	1,  // 8: kv_storage_service.KeyValueStorage.Get:output_type -> kv_storage_service.GetResponse
-	3,  // 9: kv_storage_service.KeyValueStorage.Set:output_type -> kv_storage_service.SetResponse
-	3,  // 10: kv_storage_service.KeyValueStorage.SetStream:output_type -> kv_storage_service.SetResponse
-	5,  // 11: kv_storage_service.KeyValueStorage.Gossip:output_type -> kv_storage_service.GossipResponse
-	9,  // 12: kv_storage_service.KeyValueStorage.FetchFromSeed:output_type -> kv_storage_service.FetchFromSeedResponse
-	11, // 13: kv_storage_service.KeyValueStorage.LeMeta:output_type -> kv_storage_service.LeMetaResponse
-	13, // 14: kv_storage_service.KeyValueStorage.UpdateLeader:output_type -> kv_storage_service.UpdateLeaderResponse
-	15, // 15: kv_storage_service.KeyValueStorage.UpdateAddresses:output_type -> kv_storage_service.UpdateAddressesResponse
-	8,  // [8:16] is the sub-list for method output_type
-	0,  // [0:8] is the sub-list for method input_type
+	10, // 3: kv_storage_service.KeyValueStorage.LeMeta:input_type -> kv_storage_service.LeMetaRequest
+	12, // 4: kv_storage_service.KeyValueStorage.UpdateLeader:input_type -> kv_storage_service.UpdateLeaderRequest
+	14, // 5: kv_storage_service.KeyValueStorage.UpdateAddresses:input_type -> kv_storage_service.UpdateAddressesRequest
+	1,  // 6: kv_storage_service.KeyValueStorage.Get:output_type -> kv_storage_service.GetResponse
+	3,  // 7: kv_storage_service.KeyValueStorage.Set:output_type -> kv_storage_service.SetResponse
+	3,  // 8: kv_storage_service.KeyValueStorage.SetStream:output_type -> kv_storage_service.SetResponse
+	11, // 9: kv_storage_service.KeyValueStorage.LeMeta:output_type -> kv_storage_service.LeMetaResponse
+	13, // 10: kv_storage_service.KeyValueStorage.UpdateLeader:output_type -> kv_storage_service.UpdateLeaderResponse
+	15, // 11: kv_storage_service.KeyValueStorage.UpdateAddresses:output_type -> kv_storage_service.UpdateAddressesResponse
+	6,  // [6:12] is the sub-list for method output_type
+	0,  // [0:6] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name
