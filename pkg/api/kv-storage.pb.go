@@ -532,7 +532,7 @@ func (*LeMetaRequest) Descriptor() ([]byte, []int) {
 
 type LeMetaResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Node          int64                  `protobuf:"varint,1,opt,name=node,proto3" json:"node,omitempty"`
+	NomadId       string                 `protobuf:"bytes,1,opt,name=nomad_id,json=nomadId,proto3" json:"nomad_id,omitempty"`
 	DataVersion   int64                  `protobuf:"varint,2,opt,name=data_version,json=dataVersion,proto3" json:"data_version,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -568,11 +568,11 @@ func (*LeMetaResponse) Descriptor() ([]byte, []int) {
 	return file_api_kv_storage_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *LeMetaResponse) GetNode() int64 {
+func (x *LeMetaResponse) GetNomadId() string {
 	if x != nil {
-		return x.Node
+		return x.NomadId
 	}
-	return 0
+	return ""
 }
 
 func (x *LeMetaResponse) GetDataVersion() int64 {
@@ -584,7 +584,7 @@ func (x *LeMetaResponse) GetDataVersion() int64 {
 
 type UpdateLeaderRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	NomadId       string                 `protobuf:"bytes,1,opt,name=nomad_id,json=nomadId,proto3" json:"nomad_id,omitempty"`
 	Address       string                 `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -620,11 +620,11 @@ func (*UpdateLeaderRequest) Descriptor() ([]byte, []int) {
 	return file_api_kv_storage_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *UpdateLeaderRequest) GetId() int64 {
+func (x *UpdateLeaderRequest) GetNomadId() string {
 	if x != nil {
-		return x.Id
+		return x.NomadId
 	}
-	return 0
+	return ""
 }
 
 func (x *UpdateLeaderRequest) GetAddress() string {
@@ -783,12 +783,12 @@ const file_api_kv_storage_proto_rawDesc = "" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\"-\n" +
 	"\x15FetchFromSeedResponse\x12\x14\n" +
 	"\x05peers\x18\x01 \x03(\tR\x05peers\"\x0f\n" +
-	"\rLeMetaRequest\"G\n" +
-	"\x0eLeMetaResponse\x12\x12\n" +
-	"\x04node\x18\x01 \x01(\x03R\x04node\x12!\n" +
-	"\fdata_version\x18\x02 \x01(\x03R\vdataVersion\"?\n" +
-	"\x13UpdateLeaderRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x18\n" +
+	"\rLeMetaRequest\"N\n" +
+	"\x0eLeMetaResponse\x12\x19\n" +
+	"\bnomad_id\x18\x01 \x01(\tR\anomadId\x12!\n" +
+	"\fdata_version\x18\x02 \x01(\x03R\vdataVersion\"J\n" +
+	"\x13UpdateLeaderRequest\x12\x19\n" +
+	"\bnomad_id\x18\x01 \x01(\tR\anomadId\x12\x18\n" +
 	"\aaddress\x18\x02 \x01(\tR\aaddress\"\x16\n" +
 	"\x14UpdateLeaderResponse\"6\n" +
 	"\x16UpdateAddressesRequest\x12\x1c\n" +
