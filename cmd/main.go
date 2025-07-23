@@ -5,6 +5,7 @@ import (
 	"fmt"
 	kv_storage_service "github.com/Na322Pr/kv-storage-service/internal/app/kv-storage-service"
 	"github.com/Na322Pr/kv-storage-service/internal/config"
+	"github.com/Na322Pr/kv-storage-service/internal/model"
 	"github.com/Na322Pr/kv-storage-service/internal/service"
 	"github.com/Na322Pr/kv-storage-service/internal/storage"
 	desc "github.com/Na322Pr/kv-storage-service/pkg/api"
@@ -17,6 +18,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"syscall"
 
@@ -57,16 +59,18 @@ func main() {
 	http.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
 	go http.ListenAndServe(":2112", nil)
 
-	nodeModel := nodemodel.NewNode(cfg.Node.ID, grpcAddress)
+	oldNodeModel := nodemodel.NewNode(cfg.Node.ID, grpcAddress)
+	nodeModel := model.NewNode(strconv.Itoa(cfg.Node.ID), "", grpcAddress)
 
-	nodeService := service.NewNodeService(nodeModel, logger)
+	nodeService := service.NewNodeService(oldNodeModel, logger)
+	cmService := service.NewConnectionManagerService()
 
 	keyValueStorage := storage.NewKeyValueInMemoryStorage()
-	storageService := service.NewStorageService(keyValueStorage)
+	storageService := service.NewStorageService(keyValueStorage, nodeModel, cmService)
 
-	leService := service.NewLeService(nodeModel, storageService, logger)
+	leService := service.NewLeService(oldNodeModel, storageService, logger)
 
-	storeApp := kv_storage_service.NewImplementation(nodeService, storageService, leService)
+	storeApp := kv_storage_service.NewImplementation(nodeService, storageService, leService, logger)
 
 	lis, err := net.Listen("tcp", grpcAddress)
 	if err != nil {
@@ -95,10 +99,10 @@ func main() {
 		}
 	}()
 
-	logger.Info("Starting gossiping...")
-	if err := nodeService.Run(ctx, cfg.SeedNodes); err != nil {
-		log.Fatalf("Failed to start node: %v", err)
-	}
+	//logger.Info("Starting gossiping...")
+	//if err := nodeService.Run(ctx, cfg.SeedNodes); err != nil {
+	//	log.Fatalf("Failed to start node: %v", err)
+	//}
 
 	<-stop
 	fmt.Println("\nShutting down servers...")

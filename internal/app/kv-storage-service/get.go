@@ -6,5 +6,13 @@ import (
 )
 
 func (s *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
-	return &desc.GetResponse{}, nil
+
+	value, ok := s.storageService.Get(ctx, req.Key)
+
+	resp := &desc.GetResponse{
+		Value: value,
+		Found: ok,
+	}
+
+	return resp, nil
 }

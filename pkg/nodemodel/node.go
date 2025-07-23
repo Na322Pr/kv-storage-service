@@ -8,6 +8,7 @@ import (
 
 type Node struct {
 	ID           int
+	NomadID      string
 	Address      string
 	IsLeader     bool
 	Peers        map[string]time.Time
@@ -25,8 +26,16 @@ func NewNode(id int, address string) *Node {
 	}
 }
 
+func (n *Node) GetID() int {
+	return n.ID
+}
+
 func (n *Node) GetAddress() string {
 	return n.Address
+}
+
+func (n *Node) GetIsLeader() int {
+	return n.LastElection
 }
 
 func (n *Node) GetPeers() []string {
@@ -49,7 +58,7 @@ func (n *Node) GetPeersString() string {
 func (n *Node) UpdatePeer(peer string) {
 	n.mu.Lock()
 	defer n.mu.Unlock()
-	
+
 	n.Peers[peer] = time.Now()
 }
 

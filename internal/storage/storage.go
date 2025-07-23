@@ -11,7 +11,7 @@ type KeyValueInMemoryStorage struct {
 }
 
 type Item struct {
-	Value      interface{}
+	Value      string
 	Expiration int64
 }
 
@@ -22,8 +22,17 @@ func NewKeyValueInMemoryStorage() *KeyValueInMemoryStorage {
 	}
 }
 
-func (s *KeyValueInMemoryStorage) Set(key string, value interface{}) {
+func (s *KeyValueInMemoryStorage) Set(key string, value string) {
 	s.items.Store(key, Item{Value: value})
+	s.version++
+}
+
+func (s *KeyValueInMemoryStorage) SetWithExpiration(key string, value string, expiration time.Duration) {
+	expirationTime := time.Now().Add(expiration).UnixNano()
+	s.items.Store(key, Item{
+		Value:      value,
+		Expiration: expirationTime,
+	})
 	s.version++
 }
 
@@ -37,15 +46,6 @@ func (s *KeyValueInMemoryStorage) Get(key string) (Item, bool) {
 
 func (s *KeyValueInMemoryStorage) GetDataVersion() int64 {
 	return s.version
-}
-
-func (s *KeyValueInMemoryStorage) SetWithExpiration(key string, value interface{}, expiration time.Duration) {
-	expirationTime := time.Now().Add(expiration).UnixNano()
-	s.items.Store(key, Item{
-		Value:      value,
-		Expiration: expirationTime,
-	})
-	s.version++
 }
 
 func (s *KeyValueInMemoryStorage) Delete(key string) {
