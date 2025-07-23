@@ -636,7 +636,6 @@ func (x *UpdateLeaderRequest) GetAddress() string {
 
 type UpdateLeaderResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Addresses     []string               `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -671,15 +670,9 @@ func (*UpdateLeaderResponse) Descriptor() ([]byte, []int) {
 	return file_api_kv_storage_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *UpdateLeaderResponse) GetAddresses() []string {
-	if x != nil {
-		return x.Addresses
-	}
-	return nil
-}
-
 type UpdateAddressesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Addresses     []string               `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -712,6 +705,13 @@ func (x *UpdateAddressesRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use UpdateAddressesRequest.ProtoReflect.Descriptor instead.
 func (*UpdateAddressesRequest) Descriptor() ([]byte, []int) {
 	return file_api_kv_storage_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *UpdateAddressesRequest) GetAddresses() []string {
+	if x != nil {
+		return x.Addresses
+	}
+	return nil
 }
 
 type UpdateAddressesResponse struct {
@@ -789,10 +789,10 @@ const file_api_kv_storage_proto_rawDesc = "" +
 	"\fdata_version\x18\x02 \x01(\x03R\vdataVersion\"?\n" +
 	"\x13UpdateLeaderRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x18\n" +
-	"\aaddress\x18\x02 \x01(\tR\aaddress\"4\n" +
-	"\x14UpdateLeaderResponse\x12\x1c\n" +
-	"\taddresses\x18\x01 \x03(\tR\taddresses\"\x18\n" +
-	"\x16UpdateAddressesRequest\"\x19\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddress\"\x16\n" +
+	"\x14UpdateLeaderResponse\"6\n" +
+	"\x16UpdateAddressesRequest\x12\x1c\n" +
+	"\taddresses\x18\x01 \x03(\tR\taddresses\"\x19\n" +
 	"\x17UpdateAddressesResponse2\xca\x05\n" +
 	"\x0fKeyValueStorage\x12F\n" +
 	"\x03Get\x12\x1e.kv_storage_service.GetRequest\x1a\x1f.kv_storage_service.GetResponse\x12F\n" +
