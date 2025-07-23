@@ -21,25 +21,31 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	KeyValueStorage_Get_FullMethodName           = "/kv_storage_service.KeyValueStorage/Get"
 	KeyValueStorage_Set_FullMethodName           = "/kv_storage_service.KeyValueStorage/Set"
+	KeyValueStorage_SetStream_FullMethodName     = "/kv_storage_service.KeyValueStorage/SetStream"
 	KeyValueStorage_Gossip_FullMethodName        = "/kv_storage_service.KeyValueStorage/Gossip"
-	KeyValueStorage_LeaderVote_FullMethodName    = "/kv_storage_service.KeyValueStorage/LeaderVote"
 	KeyValueStorage_FetchFromSeed_FullMethodName = "/kv_storage_service.KeyValueStorage/FetchFromSeed"
+	KeyValueStorage_LeMeta_FullMethodName        = "/kv_storage_service.KeyValueStorage/LeMeta"
+	KeyValueStorage_UpdateLeader_FullMethodName  = "/kv_storage_service.KeyValueStorage/UpdateLeader"
 )
 
 // KeyValueStorageClient is the client API for KeyValueStorage service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type KeyValueStorageClient interface {
-	// Получение данных
+	// Получение данных - must have
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
-	// Изменение данных
+	// Изменение данных - must have
 	Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error)
-	// Gossip
+	// Измнение данных от мастера к репликам - must have
+	SetStream(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SetRequest, SetResponse], error)
+	// Gossip - code but no usage
 	Gossip(ctx context.Context, in *GossipRequest, opts ...grpc.CallOption) (*GossipResponse, error)
-	// LeaderVote
-	LeaderVote(ctx context.Context, in *LeaderVoteRequest, opts ...grpc.CallOption) (*LeaderVoteResponse, error)
-	// Получение карты кластера
+	// Получение карты кластера - code but no usage
 	FetchFromSeed(ctx context.Context, in *FetchFromSeedRequest, opts ...grpc.CallOption) (*FetchFromSeedResponse, error)
+	// Отдача информации для Leader Election
+	LeMeta(ctx context.Context, in *LeMetaRequest, opts ...grpc.CallOption) (*LeMetaResponse, error)
+	// Извещение о новом лидере от cluster-manager-service
+	UpdateLeader(ctx context.Context, in *UpdateLeaderRequest, opts ...grpc.CallOption) (*UpdateLeaderResponse, error)
 }
 
 type keyValueStorageClient struct {
@@ -70,20 +76,23 @@ func (c *keyValueStorageClient) Set(ctx context.Context, in *SetRequest, opts ..
 	return out, nil
 }
 
+func (c *keyValueStorageClient) SetStream(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SetRequest, SetResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &KeyValueStorage_ServiceDesc.Streams[0], KeyValueStorage_SetStream_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SetRequest, SetResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type KeyValueStorage_SetStreamClient = grpc.BidiStreamingClient[SetRequest, SetResponse]
+
 func (c *keyValueStorageClient) Gossip(ctx context.Context, in *GossipRequest, opts ...grpc.CallOption) (*GossipResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GossipResponse)
 	err := c.cc.Invoke(ctx, KeyValueStorage_Gossip_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *keyValueStorageClient) LeaderVote(ctx context.Context, in *LeaderVoteRequest, opts ...grpc.CallOption) (*LeaderVoteResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(LeaderVoteResponse)
-	err := c.cc.Invoke(ctx, KeyValueStorage_LeaderVote_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,20 +109,44 @@ func (c *keyValueStorageClient) FetchFromSeed(ctx context.Context, in *FetchFrom
 	return out, nil
 }
 
+func (c *keyValueStorageClient) LeMeta(ctx context.Context, in *LeMetaRequest, opts ...grpc.CallOption) (*LeMetaResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LeMetaResponse)
+	err := c.cc.Invoke(ctx, KeyValueStorage_LeMeta_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keyValueStorageClient) UpdateLeader(ctx context.Context, in *UpdateLeaderRequest, opts ...grpc.CallOption) (*UpdateLeaderResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateLeaderResponse)
+	err := c.cc.Invoke(ctx, KeyValueStorage_UpdateLeader_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KeyValueStorageServer is the server API for KeyValueStorage service.
 // All implementations must embed UnimplementedKeyValueStorageServer
 // for forward compatibility.
 type KeyValueStorageServer interface {
-	// Получение данных
+	// Получение данных - must have
 	Get(context.Context, *GetRequest) (*GetResponse, error)
-	// Изменение данных
+	// Изменение данных - must have
 	Set(context.Context, *SetRequest) (*SetResponse, error)
-	// Gossip
+	// Измнение данных от мастера к репликам - must have
+	SetStream(grpc.BidiStreamingServer[SetRequest, SetResponse]) error
+	// Gossip - code but no usage
 	Gossip(context.Context, *GossipRequest) (*GossipResponse, error)
-	// LeaderVote
-	LeaderVote(context.Context, *LeaderVoteRequest) (*LeaderVoteResponse, error)
-	// Получение карты кластера
+	// Получение карты кластера - code but no usage
 	FetchFromSeed(context.Context, *FetchFromSeedRequest) (*FetchFromSeedResponse, error)
+	// Отдача информации для Leader Election
+	LeMeta(context.Context, *LeMetaRequest) (*LeMetaResponse, error)
+	// Извещение о новом лидере от cluster-manager-service
+	UpdateLeader(context.Context, *UpdateLeaderRequest) (*UpdateLeaderResponse, error)
 	mustEmbedUnimplementedKeyValueStorageServer()
 }
 
@@ -130,14 +163,20 @@ func (UnimplementedKeyValueStorageServer) Get(context.Context, *GetRequest) (*Ge
 func (UnimplementedKeyValueStorageServer) Set(context.Context, *SetRequest) (*SetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Set not implemented")
 }
+func (UnimplementedKeyValueStorageServer) SetStream(grpc.BidiStreamingServer[SetRequest, SetResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method SetStream not implemented")
+}
 func (UnimplementedKeyValueStorageServer) Gossip(context.Context, *GossipRequest) (*GossipResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Gossip not implemented")
 }
-func (UnimplementedKeyValueStorageServer) LeaderVote(context.Context, *LeaderVoteRequest) (*LeaderVoteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LeaderVote not implemented")
-}
 func (UnimplementedKeyValueStorageServer) FetchFromSeed(context.Context, *FetchFromSeedRequest) (*FetchFromSeedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FetchFromSeed not implemented")
+}
+func (UnimplementedKeyValueStorageServer) LeMeta(context.Context, *LeMetaRequest) (*LeMetaResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LeMeta not implemented")
+}
+func (UnimplementedKeyValueStorageServer) UpdateLeader(context.Context, *UpdateLeaderRequest) (*UpdateLeaderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateLeader not implemented")
 }
 func (UnimplementedKeyValueStorageServer) mustEmbedUnimplementedKeyValueStorageServer() {}
 func (UnimplementedKeyValueStorageServer) testEmbeddedByValue()                         {}
@@ -196,6 +235,13 @@ func _KeyValueStorage_Set_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _KeyValueStorage_SetStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(KeyValueStorageServer).SetStream(&grpc.GenericServerStream[SetRequest, SetResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type KeyValueStorage_SetStreamServer = grpc.BidiStreamingServer[SetRequest, SetResponse]
+
 func _KeyValueStorage_Gossip_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GossipRequest)
 	if err := dec(in); err != nil {
@@ -214,24 +260,6 @@ func _KeyValueStorage_Gossip_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KeyValueStorage_LeaderVote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LeaderVoteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyValueStorageServer).LeaderVote(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: KeyValueStorage_LeaderVote_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyValueStorageServer).LeaderVote(ctx, req.(*LeaderVoteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _KeyValueStorage_FetchFromSeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FetchFromSeedRequest)
 	if err := dec(in); err != nil {
@@ -246,6 +274,42 @@ func _KeyValueStorage_FetchFromSeed_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeyValueStorageServer).FetchFromSeed(ctx, req.(*FetchFromSeedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeyValueStorage_LeMeta_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeMetaRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeyValueStorageServer).LeMeta(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KeyValueStorage_LeMeta_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeyValueStorageServer).LeMeta(ctx, req.(*LeMetaRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KeyValueStorage_UpdateLeader_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateLeaderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeyValueStorageServer).UpdateLeader(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KeyValueStorage_UpdateLeader_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeyValueStorageServer).UpdateLeader(ctx, req.(*UpdateLeaderRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -270,14 +334,25 @@ var KeyValueStorage_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KeyValueStorage_Gossip_Handler,
 		},
 		{
-			MethodName: "LeaderVote",
-			Handler:    _KeyValueStorage_LeaderVote_Handler,
-		},
-		{
 			MethodName: "FetchFromSeed",
 			Handler:    _KeyValueStorage_FetchFromSeed_Handler,
 		},
+		{
+			MethodName: "LeMeta",
+			Handler:    _KeyValueStorage_LeMeta_Handler,
+		},
+		{
+			MethodName: "UpdateLeader",
+			Handler:    _KeyValueStorage_UpdateLeader_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SetStream",
+			Handler:       _KeyValueStorage_SetStream_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "api/kv-storage.proto",
 }

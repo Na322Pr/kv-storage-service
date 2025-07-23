@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package kv_storage_service;
 
+import "google/protobuf/any.proto";
+
 option go_package = "github.com/Na322Pr/kv-storage-service/pkg/kv-storage-service;kv_storage_service";
 
 service KeyValueStorage {
@@ -9,6 +11,8 @@ service KeyValueStorage {
   rpc Get(GetRequest) returns (GetResponse);
   // Изменение данных - must have
   rpc Set(SetRequest) returns (SetResponse);
+  // Измнение данных от мастера к репликам - must have
+  rpc SetStream(stream SetRequest) returns (stream SetResponse);
   // Gossip - code but no usage
   rpc Gossip(GossipRequest) returns (GossipResponse);
   // Получение карты кластера - code but no usage
@@ -16,12 +20,10 @@ service KeyValueStorage {
   // Отдача информации для Leader Election
   rpc LeMeta(LeMetaRequest) returns (LeMetaResponse);
   // Извещение о новом лидере от cluster-manager-service
-  rpc SetLeader(NewLeaderRequest) returns (NewLeaderResponse);
+  rpc UpdateLeader(UpdateLeaderRequest) returns (UpdateLeaderResponse);
 }
 
-message GetRequest {
-  string key = 1;
-}
+message GetRequest { string key = 1; }
 
 message GetResponse {
   string value = 1;
@@ -31,19 +33,14 @@ message GetResponse {
 message SetRequest {
   string key = 1;
   string value = 2;
+  optional string operation = 3;
 }
 
-message SetResponse {
-  bool success = 1;
-}
+message SetResponse {};
 
-message GossipRequest {
-  string node = 1;
-}
+message GossipRequest { string node = 1; }
 
-message GossipResponse {
-  bool is_leader = 1;
-}
+message GossipResponse { bool is_leader = 1; }
 
 message LeaderVoteRequest {
   string candidate_address = 1;
@@ -70,12 +67,12 @@ message LeMetaResponse {
   int64 data_version = 2;
 }
 
-message NewLeaderRequest {
+message UpdateLeaderRequest {
   int64 id = 1;
   string address = 2;
 }
 
-message NewLeaderResponse {}
+message UpdateLeaderResponse {}
 
 message Status {
   int32 code = 1;

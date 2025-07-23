@@ -9,6 +9,7 @@ package kv_storage_service
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	_ "google.golang.org/protobuf/types/known/anypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -121,6 +122,7 @@ type SetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Operation     *string                `protobuf:"bytes,3,opt,name=operation,proto3,oneof" json:"operation,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -169,9 +171,15 @@ func (x *SetRequest) GetValue() string {
 	return ""
 }
 
+func (x *SetRequest) GetOperation() string {
+	if x != nil && x.Operation != nil {
+		return *x.Operation
+	}
+	return ""
+}
+
 type SetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -204,13 +212,6 @@ func (x *SetResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SetResponse.ProtoReflect.Descriptor instead.
 func (*SetResponse) Descriptor() ([]byte, []int) {
 	return file_api_kv_storage_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *SetResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
 }
 
 type GossipRequest struct {
@@ -493,6 +494,182 @@ func (x *FetchFromSeedResponse) GetPeers() []string {
 	return nil
 }
 
+type LeMetaRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeMetaRequest) Reset() {
+	*x = LeMetaRequest{}
+	mi := &file_api_kv_storage_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeMetaRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeMetaRequest) ProtoMessage() {}
+
+func (x *LeMetaRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_kv_storage_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeMetaRequest.ProtoReflect.Descriptor instead.
+func (*LeMetaRequest) Descriptor() ([]byte, []int) {
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{10}
+}
+
+type LeMetaResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Node          int64                  `protobuf:"varint,1,opt,name=node,proto3" json:"node,omitempty"`
+	DataVersion   int64                  `protobuf:"varint,2,opt,name=data_version,json=dataVersion,proto3" json:"data_version,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeMetaResponse) Reset() {
+	*x = LeMetaResponse{}
+	mi := &file_api_kv_storage_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeMetaResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeMetaResponse) ProtoMessage() {}
+
+func (x *LeMetaResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_kv_storage_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeMetaResponse.ProtoReflect.Descriptor instead.
+func (*LeMetaResponse) Descriptor() ([]byte, []int) {
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *LeMetaResponse) GetNode() int64 {
+	if x != nil {
+		return x.Node
+	}
+	return 0
+}
+
+func (x *LeMetaResponse) GetDataVersion() int64 {
+	if x != nil {
+		return x.DataVersion
+	}
+	return 0
+}
+
+type UpdateLeaderRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Address       string                 `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateLeaderRequest) Reset() {
+	*x = UpdateLeaderRequest{}
+	mi := &file_api_kv_storage_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateLeaderRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateLeaderRequest) ProtoMessage() {}
+
+func (x *UpdateLeaderRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_kv_storage_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateLeaderRequest.ProtoReflect.Descriptor instead.
+func (*UpdateLeaderRequest) Descriptor() ([]byte, []int) {
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *UpdateLeaderRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateLeaderRequest) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+type UpdateLeaderResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateLeaderResponse) Reset() {
+	*x = UpdateLeaderResponse{}
+	mi := &file_api_kv_storage_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateLeaderResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateLeaderResponse) ProtoMessage() {}
+
+func (x *UpdateLeaderResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_kv_storage_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateLeaderResponse.ProtoReflect.Descriptor instead.
+func (*UpdateLeaderResponse) Descriptor() ([]byte, []int) {
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{13}
+}
+
 type Status struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
@@ -503,7 +680,7 @@ type Status struct {
 
 func (x *Status) Reset() {
 	*x = Status{}
-	mi := &file_api_kv_storage_proto_msgTypes[10]
+	mi := &file_api_kv_storage_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -515,7 +692,7 @@ func (x *Status) String() string {
 func (*Status) ProtoMessage() {}
 
 func (x *Status) ProtoReflect() protoreflect.Message {
-	mi := &file_api_kv_storage_proto_msgTypes[10]
+	mi := &file_api_kv_storage_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -528,7 +705,7 @@ func (x *Status) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Status.ProtoReflect.Descriptor instead.
 func (*Status) Descriptor() ([]byte, []int) {
-	return file_api_kv_storage_proto_rawDescGZIP(), []int{10}
+	return file_api_kv_storage_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *Status) GetCode() int32 {
@@ -549,19 +726,21 @@ var File_api_kv_storage_proto protoreflect.FileDescriptor
 
 const file_api_kv_storage_proto_rawDesc = "" +
 	"\n" +
-	"\x14api/kv-storage.proto\x12\x12kv_storage_service\"\x1e\n" +
+	"\x14api/kv-storage.proto\x12\x12kv_storage_service\x1a\x19google/protobuf/any.proto\"\x1e\n" +
 	"\n" +
 	"GetRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\"9\n" +
 	"\vGetResponse\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\tR\x05value\x12\x14\n" +
-	"\x05found\x18\x02 \x01(\bR\x05found\"4\n" +
+	"\x05found\x18\x02 \x01(\bR\x05found\"e\n" +
 	"\n" +
 	"SetRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"'\n" +
-	"\vSetResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"#\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\x12!\n" +
+	"\toperation\x18\x03 \x01(\tH\x00R\toperation\x88\x01\x01B\f\n" +
+	"\n" +
+	"_operation\"\r\n" +
+	"\vSetResponse\"#\n" +
 	"\rGossipRequest\x12\x12\n" +
 	"\x04node\x18\x01 \x01(\tR\x04node\"-\n" +
 	"\x0eGossipResponse\x12\x1b\n" +
@@ -575,17 +754,26 @@ const file_api_kv_storage_proto_rawDesc = "" +
 	"\x14FetchFromSeedRequest\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\"-\n" +
 	"\x15FetchFromSeedResponse\x12\x14\n" +
-	"\x05peers\x18\x01 \x03(\tR\x05peers\"6\n" +
+	"\x05peers\x18\x01 \x03(\tR\x05peers\"\x0f\n" +
+	"\rLeMetaRequest\"G\n" +
+	"\x0eLeMetaResponse\x12\x12\n" +
+	"\x04node\x18\x01 \x01(\x03R\x04node\x12!\n" +
+	"\fdata_version\x18\x02 \x01(\x03R\vdataVersion\"?\n" +
+	"\x13UpdateLeaderRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x18\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddress\"\x16\n" +
+	"\x14UpdateLeaderResponse\"6\n" +
 	"\x06Status\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2\xb5\x03\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2\xde\x04\n" +
 	"\x0fKeyValueStorage\x12F\n" +
 	"\x03Get\x12\x1e.kv_storage_service.GetRequest\x1a\x1f.kv_storage_service.GetResponse\x12F\n" +
-	"\x03Set\x12\x1e.kv_storage_service.SetRequest\x1a\x1f.kv_storage_service.SetResponse\x12O\n" +
-	"\x06Gossip\x12!.kv_storage_service.GossipRequest\x1a\".kv_storage_service.GossipResponse\x12[\n" +
-	"\n" +
-	"LeaderVote\x12%.kv_storage_service.LeaderVoteRequest\x1a&.kv_storage_service.LeaderVoteResponse\x12d\n" +
-	"\rFetchFromSeed\x12(.kv_storage_service.FetchFromSeedRequest\x1a).kv_storage_service.FetchFromSeedResponseBaZ_github.com/Na322Pr/key-value-store/kv-storage-service/pkg/kv-storage-service;kv_storage_serviceb\x06proto3"
+	"\x03Set\x12\x1e.kv_storage_service.SetRequest\x1a\x1f.kv_storage_service.SetResponse\x12P\n" +
+	"\tSetStream\x12\x1e.kv_storage_service.SetRequest\x1a\x1f.kv_storage_service.SetResponse(\x010\x01\x12O\n" +
+	"\x06Gossip\x12!.kv_storage_service.GossipRequest\x1a\".kv_storage_service.GossipResponse\x12d\n" +
+	"\rFetchFromSeed\x12(.kv_storage_service.FetchFromSeedRequest\x1a).kv_storage_service.FetchFromSeedResponse\x12O\n" +
+	"\x06LeMeta\x12!.kv_storage_service.LeMetaRequest\x1a\".kv_storage_service.LeMetaResponse\x12a\n" +
+	"\fUpdateLeader\x12'.kv_storage_service.UpdateLeaderRequest\x1a(.kv_storage_service.UpdateLeaderResponseBQZOgithub.com/Na322Pr/kv-storage-service/pkg/kv-storage-service;kv_storage_serviceb\x06proto3"
 
 var (
 	file_api_kv_storage_proto_rawDescOnce sync.Once
@@ -599,7 +787,7 @@ func file_api_kv_storage_proto_rawDescGZIP() []byte {
 	return file_api_kv_storage_proto_rawDescData
 }
 
-var file_api_kv_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_api_kv_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_api_kv_storage_proto_goTypes = []any{
 	(*GetRequest)(nil),            // 0: kv_storage_service.GetRequest
 	(*GetResponse)(nil),           // 1: kv_storage_service.GetResponse
@@ -611,24 +799,32 @@ var file_api_kv_storage_proto_goTypes = []any{
 	(*LeaderVoteResponse)(nil),    // 7: kv_storage_service.LeaderVoteResponse
 	(*FetchFromSeedRequest)(nil),  // 8: kv_storage_service.FetchFromSeedRequest
 	(*FetchFromSeedResponse)(nil), // 9: kv_storage_service.FetchFromSeedResponse
-	(*Status)(nil),                // 10: kv_storage_service.Status
+	(*LeMetaRequest)(nil),         // 10: kv_storage_service.LeMetaRequest
+	(*LeMetaResponse)(nil),        // 11: kv_storage_service.LeMetaResponse
+	(*UpdateLeaderRequest)(nil),   // 12: kv_storage_service.UpdateLeaderRequest
+	(*UpdateLeaderResponse)(nil),  // 13: kv_storage_service.UpdateLeaderResponse
+	(*Status)(nil),                // 14: kv_storage_service.Status
 }
 var file_api_kv_storage_proto_depIdxs = []int32{
-	0, // 0: kv_storage_service.KeyValueStorage.Get:input_type -> kv_storage_service.GetRequest
-	2, // 1: kv_storage_service.KeyValueStorage.Set:input_type -> kv_storage_service.SetRequest
-	4, // 2: kv_storage_service.KeyValueStorage.Gossip:input_type -> kv_storage_service.GossipRequest
-	6, // 3: kv_storage_service.KeyValueStorage.LeaderVote:input_type -> kv_storage_service.LeaderVoteRequest
-	8, // 4: kv_storage_service.KeyValueStorage.FetchFromSeed:input_type -> kv_storage_service.FetchFromSeedRequest
-	1, // 5: kv_storage_service.KeyValueStorage.Get:output_type -> kv_storage_service.GetResponse
-	3, // 6: kv_storage_service.KeyValueStorage.Set:output_type -> kv_storage_service.SetResponse
-	5, // 7: kv_storage_service.KeyValueStorage.Gossip:output_type -> kv_storage_service.GossipResponse
-	7, // 8: kv_storage_service.KeyValueStorage.LeaderVote:output_type -> kv_storage_service.LeaderVoteResponse
-	9, // 9: kv_storage_service.KeyValueStorage.FetchFromSeed:output_type -> kv_storage_service.FetchFromSeedResponse
-	5, // [5:10] is the sub-list for method output_type
-	0, // [0:5] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0,  // 0: kv_storage_service.KeyValueStorage.Get:input_type -> kv_storage_service.GetRequest
+	2,  // 1: kv_storage_service.KeyValueStorage.Set:input_type -> kv_storage_service.SetRequest
+	2,  // 2: kv_storage_service.KeyValueStorage.SetStream:input_type -> kv_storage_service.SetRequest
+	4,  // 3: kv_storage_service.KeyValueStorage.Gossip:input_type -> kv_storage_service.GossipRequest
+	8,  // 4: kv_storage_service.KeyValueStorage.FetchFromSeed:input_type -> kv_storage_service.FetchFromSeedRequest
+	10, // 5: kv_storage_service.KeyValueStorage.LeMeta:input_type -> kv_storage_service.LeMetaRequest
+	12, // 6: kv_storage_service.KeyValueStorage.UpdateLeader:input_type -> kv_storage_service.UpdateLeaderRequest
+	1,  // 7: kv_storage_service.KeyValueStorage.Get:output_type -> kv_storage_service.GetResponse
+	3,  // 8: kv_storage_service.KeyValueStorage.Set:output_type -> kv_storage_service.SetResponse
+	3,  // 9: kv_storage_service.KeyValueStorage.SetStream:output_type -> kv_storage_service.SetResponse
+	5,  // 10: kv_storage_service.KeyValueStorage.Gossip:output_type -> kv_storage_service.GossipResponse
+	9,  // 11: kv_storage_service.KeyValueStorage.FetchFromSeed:output_type -> kv_storage_service.FetchFromSeedResponse
+	11, // 12: kv_storage_service.KeyValueStorage.LeMeta:output_type -> kv_storage_service.LeMetaResponse
+	13, // 13: kv_storage_service.KeyValueStorage.UpdateLeader:output_type -> kv_storage_service.UpdateLeaderResponse
+	7,  // [7:14] is the sub-list for method output_type
+	0,  // [0:7] is the sub-list for method input_type
+	0,  // [0:0] is the sub-list for extension type_name
+	0,  // [0:0] is the sub-list for extension extendee
+	0,  // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_api_kv_storage_proto_init() }
@@ -636,13 +832,14 @@ func file_api_kv_storage_proto_init() {
 	if File_api_kv_storage_proto != nil {
 		return
 	}
+	file_api_kv_storage_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_kv_storage_proto_rawDesc), len(file_api_kv_storage_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
