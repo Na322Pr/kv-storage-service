@@ -19,13 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	KeyValueStorage_Get_FullMethodName           = "/kv_storage_service.KeyValueStorage/Get"
-	KeyValueStorage_Set_FullMethodName           = "/kv_storage_service.KeyValueStorage/Set"
-	KeyValueStorage_SetStream_FullMethodName     = "/kv_storage_service.KeyValueStorage/SetStream"
-	KeyValueStorage_Gossip_FullMethodName        = "/kv_storage_service.KeyValueStorage/Gossip"
-	KeyValueStorage_FetchFromSeed_FullMethodName = "/kv_storage_service.KeyValueStorage/FetchFromSeed"
-	KeyValueStorage_LeMeta_FullMethodName        = "/kv_storage_service.KeyValueStorage/LeMeta"
-	KeyValueStorage_UpdateLeader_FullMethodName  = "/kv_storage_service.KeyValueStorage/UpdateLeader"
+	KeyValueStorage_Get_FullMethodName             = "/kv_storage_service.KeyValueStorage/Get"
+	KeyValueStorage_Set_FullMethodName             = "/kv_storage_service.KeyValueStorage/Set"
+	KeyValueStorage_SetStream_FullMethodName       = "/kv_storage_service.KeyValueStorage/SetStream"
+	KeyValueStorage_Gossip_FullMethodName          = "/kv_storage_service.KeyValueStorage/Gossip"
+	KeyValueStorage_FetchFromSeed_FullMethodName   = "/kv_storage_service.KeyValueStorage/FetchFromSeed"
+	KeyValueStorage_LeMeta_FullMethodName          = "/kv_storage_service.KeyValueStorage/LeMeta"
+	KeyValueStorage_UpdateLeader_FullMethodName    = "/kv_storage_service.KeyValueStorage/UpdateLeader"
+	KeyValueStorage_UpdateAddresses_FullMethodName = "/kv_storage_service.KeyValueStorage/UpdateAddresses"
 )
 
 // KeyValueStorageClient is the client API for KeyValueStorage service.
@@ -46,6 +47,8 @@ type KeyValueStorageClient interface {
 	LeMeta(ctx context.Context, in *LeMetaRequest, opts ...grpc.CallOption) (*LeMetaResponse, error)
 	// Извещение о новом лидере от cluster-manager-service
 	UpdateLeader(ctx context.Context, in *UpdateLeaderRequest, opts ...grpc.CallOption) (*UpdateLeaderResponse, error)
+	// Обновляет ноды в лидере
+	UpdateAddresses(ctx context.Context, in *UpdateAddressesRequest, opts ...grpc.CallOption) (*UpdateAddressesResponse, error)
 }
 
 type keyValueStorageClient struct {
@@ -129,6 +132,16 @@ func (c *keyValueStorageClient) UpdateLeader(ctx context.Context, in *UpdateLead
 	return out, nil
 }
 
+func (c *keyValueStorageClient) UpdateAddresses(ctx context.Context, in *UpdateAddressesRequest, opts ...grpc.CallOption) (*UpdateAddressesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateAddressesResponse)
+	err := c.cc.Invoke(ctx, KeyValueStorage_UpdateAddresses_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KeyValueStorageServer is the server API for KeyValueStorage service.
 // All implementations must embed UnimplementedKeyValueStorageServer
 // for forward compatibility.
@@ -147,6 +160,8 @@ type KeyValueStorageServer interface {
 	LeMeta(context.Context, *LeMetaRequest) (*LeMetaResponse, error)
 	// Извещение о новом лидере от cluster-manager-service
 	UpdateLeader(context.Context, *UpdateLeaderRequest) (*UpdateLeaderResponse, error)
+	// Обновляет ноды в лидере
+	UpdateAddresses(context.Context, *UpdateAddressesRequest) (*UpdateAddressesResponse, error)
 	mustEmbedUnimplementedKeyValueStorageServer()
 }
 
@@ -177,6 +192,9 @@ func (UnimplementedKeyValueStorageServer) LeMeta(context.Context, *LeMetaRequest
 }
 func (UnimplementedKeyValueStorageServer) UpdateLeader(context.Context, *UpdateLeaderRequest) (*UpdateLeaderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateLeader not implemented")
+}
+func (UnimplementedKeyValueStorageServer) UpdateAddresses(context.Context, *UpdateAddressesRequest) (*UpdateAddressesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAddresses not implemented")
 }
 func (UnimplementedKeyValueStorageServer) mustEmbedUnimplementedKeyValueStorageServer() {}
 func (UnimplementedKeyValueStorageServer) testEmbeddedByValue()                         {}
@@ -314,6 +332,24 @@ func _KeyValueStorage_UpdateLeader_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _KeyValueStorage_UpdateAddresses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAddressesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeyValueStorageServer).UpdateAddresses(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KeyValueStorage_UpdateAddresses_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeyValueStorageServer).UpdateAddresses(ctx, req.(*UpdateAddressesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // KeyValueStorage_ServiceDesc is the grpc.ServiceDesc for KeyValueStorage service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -344,6 +380,10 @@ var KeyValueStorage_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateLeader",
 			Handler:    _KeyValueStorage_UpdateLeader_Handler,
+		},
+		{
+			MethodName: "UpdateAddresses",
+			Handler:    _KeyValueStorage_UpdateAddresses_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

@@ -21,6 +21,8 @@ service KeyValueStorage {
   rpc LeMeta(LeMetaRequest) returns (LeMetaResponse);
   // Извещение о новом лидере от cluster-manager-service
   rpc UpdateLeader(UpdateLeaderRequest) returns (UpdateLeaderResponse);
+  // Обновляет ноды в лидере
+  rpc UpdateAddresses(UpdateAddressesRequest) returns (UpdateAddressesResponse);
 }
 
 message GetRequest { string key = 1; }
@@ -72,9 +74,17 @@ message UpdateLeaderRequest {
   string address = 2;
 }
 
-message UpdateLeaderResponse {}
-
-message Status {
-  int32 code = 1;
-  string message = 2;
+message UpdateLeaderResponse {
+  repeated string addresses = 1;
 }
+
+message UpdateAddressesRequest {}
+
+message UpdateAddressesResponse {
+
+}
+
+//message Status {
+//  int32 code = 1;
+//  string message = 2;
+//}
